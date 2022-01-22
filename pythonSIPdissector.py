@@ -31,22 +31,25 @@ class message:
                 #Parsing for User-Agent
                 ua_re = re.compile(r'User-Agent: (.*)')
                 UA = ua_re.match(line)
+                #Parsing for Supported
+                supported_re = re.compile(r'Supported: (.*)')
+                SUPPORTED = supported_re.match(line)
 
-                if FROM :
+                if FROM:
                     self.From = {'text': FROM.group(0),
                                  'label': FROM.group(1).strip(),
                                  'user': FROM.group(2),
                                  'realm': FROM.group(3)}
-                elif TO :
+                elif TO:
                     self.to = {'text': TO.group(0),
                                'label': TO.group(1),
                                'user': TO.group(2),
                                'realm': TO.group(3)}
-                elif CALLID :
+                elif CALLID:
                     self.callId = {'text': CALLID.group(0),
                                    'uuid': CALLID.group(1),
                                    'realm': CALLID.group(2)}
-                elif VIA :
+                elif VIA:
                     self.via.append(VIA.group(0))
                 elif CSEQ :
                     self.cseq = {'text': CSEQ.group(0),
@@ -54,6 +57,9 @@ class message:
                                  'method': CSEQ.group(2)}
                 elif UA:
                     self.user_agent = UA.group(1)
+                elif SUPPORTED:
+                    self.supported = {'text': SUPPORTED.group(0),
+                                      'list': SUPPORTED.group(1).split(',')}
                 else:
                     not_supported.append(line)
                 ''' HEADERS RIMANENTI
