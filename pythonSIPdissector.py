@@ -64,7 +64,6 @@ class message:
                     not_supported.append(line)
                 ''' HEADERS RIMANENTI
                 Date: Thu, 20 Jan 2022 16:43:16 GMT
-                Supported: 100rel,timer,resource-priority,replaces,sdp-anat
                 Min-SE:  1800
                 Allow: INVITE, OPTIONS, BYE, CANCEL, ACK, PRACK, UPDATE, REFER, SUBSCRIBE, NOTIFY, INFO, REGISTER
                 Timestamp: 1642696996
@@ -154,5 +153,7 @@ class message:
         self.header = self.Header(header_line_list)
         self.body = self.Body(body_line_list)
 
+class session(message):
 
-
+    def __init__(self, session):
+        pass
