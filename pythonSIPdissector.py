@@ -37,27 +37,21 @@ class message:
                                  'label': FROM.group(1).strip(),
                                  'user': FROM.group(2),
                                  'realm': FROM.group(3)}
-                    '''
-                    self.From = FROM.group(0)
-                    self.From_label = FROM.group(1).strip()
-                    self.From_user = FROM.group(2)
-                    self.From_realm = FROM.group(3)
-                    '''
                 elif TO :
-                    self.to = TO.group(0)
-                    self.to_label = TO.group(1)
-                    self.to_user = TO.group(2)
-                    self.to_realm = TO.group(3)
+                    self.to = {'text': TO.group(0),
+                               'label': TO.group(1),
+                               'user': TO.group(2),
+                               'realm': TO.group(3)}
                 elif CALLID :
-                    self.callId = CALLID.group(0)
-                    self.callId_uuid = CALLID.group(1)
-                    self.callId_realm = CALLID.group(2)
+                    self.callId = {'text': CALLID.group(0),
+                                   'uuid': CALLID.group(1),
+                                   'realm': CALLID.group(2)}
                 elif VIA :
                     self.via.append(VIA.group(0))
                 elif CSEQ :
-                    self.cseq = CSEQ.group(0)
-                    self.cseq_number = CSEQ.group(1)
-                    self.cseq_method = CSEQ.group(2)
+                    self.cseq = {'text': CSEQ.group(0),
+                                 'number': CSEQ.group(1),
+                                 'method': CSEQ.group(2)}
                 elif UA:
                     self.user_agent = UA.group(1)
                 else:
