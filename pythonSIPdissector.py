@@ -126,8 +126,17 @@ class message:
                 self.proxy = REQURI.group(3)
                 self.port = REQURI.group(4)
             if RESURI:
-                self.response_code = RESURI.group(1)
-                self.response_text = RESURI.group(2)
+                code = int(RESURI.group(1))
+                self.code = code
+                self.reason = RESURI.group(2)
+                if code <= 699: type = 'Global Failure'
+                if code <= 599: type = 'Server Failure'
+                if code <= 499: type = 'Client Failure'
+                if code <= 399: type = 'Redirection'
+                if code <= 299: type = 'Successful'
+                if code <= 199: type = 'Provisional'
+                self.type = type
+                
 
     def __init__(self, message):
         self.message = message #importo l'intero messaggio
