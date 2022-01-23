@@ -81,7 +81,6 @@ class message:
                 Contact: <sip:1234324@1.1.1.1:5060>
                 Expires: 180
                 Allow-Events: telephone-event
-                Max-Forwards: 69
                 P-Asserted-Identity: "name" <sip:123456@1.1.1.1>
                 Session-ID: f8eb9a6e41395134832c9f66f9158bc2;remote=00000000000000000000000000000000
                 Session-Expires:  3600
@@ -111,8 +110,8 @@ class message:
                 m_re = re.compile(r'm=(\S.*) (\d{1,5}) RTP/AVP (\d.*)')
                 M = m_re.search(line)                
                 if C:
-                    self.c = C.group(0)
-                    self.c_ip = C.group(1)
+                    self.c = {'text': C.group(0),
+                              'ip': C.group(1)}
                 elif A:
                     a_list.append(A.group(0))
                 elif M:
