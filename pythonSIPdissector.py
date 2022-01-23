@@ -185,7 +185,8 @@ class message:
         self.body = self.Body(body_line_list)
 
 class call:
-
+    '''classe che definisce una chiamata come contatenazione di messaggi con medesimo call-id'''
+    
     def import_from_file():
         pass
 
