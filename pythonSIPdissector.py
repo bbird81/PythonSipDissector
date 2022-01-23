@@ -34,6 +34,9 @@ class message:
                 #Parsing for Supported
                 supported_re = re.compile(r'Supported: (.*)')
                 SUPPORTED = supported_re.match(line)
+                #Parsing for Allowed
+                allow_re = re.compile(r'Allow: (.*)')
+                ALLOW = allow_re.match(line)
 
                 if FROM:
                     self.From = {'text': FROM.group(0),
@@ -60,6 +63,9 @@ class message:
                 elif SUPPORTED:
                     self.supported = {'text': SUPPORTED.group(0),
                                       'list': SUPPORTED.group(1).split(',')}
+                elif ALLOW:
+                    self.allow = {'text': ALLOW.group(0),
+                                  'list': ALLOW.group(1).split(', ')}
                 else:
                     not_supported.append(line)
                 ''' HEADERS RIMANENTI
@@ -153,7 +159,11 @@ class message:
         self.header = self.Header(header_line_list)
         self.body = self.Body(body_line_list)
 
-class session(message):
+class call:
 
-    def __init__(self, session):
+    def import_from_file():
         pass
+
+    def __init__(self, messages=[]):
+        pass
+
