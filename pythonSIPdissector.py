@@ -1,5 +1,29 @@
 import re
 
+#BEGIN > regex declaration block
+
+#request/response
+requri_re = re.compile(r'(INVITE|OPTIONS|BYE|CANCEL|ACK|PRACK|UPDATE|REFER|SUBSCRIBE|NOTIFY|INFO|REGISTER) sip:(.*)@(.*):(\d+) SIP\/2\.0')
+resuri_re = re.compile(r'SIP/2.0 (\d{3}) (.*)')
+
+#headers
+From_re = re.compile(r'From: (.*) <sip:(.*)@(.*)>(.*)')
+To_re = re.compile(r'To:(.*)<sip:(.*)@(.*)>(.*)')
+callId_re = re.compile(r'Call-ID: (.*)@(.*)')
+via_re = re.compile(r'Via: SIP/2.0/(TCP|UDP|TLS) (.*):(.*);branch=(.*)')
+cseq_re = re.compile(r'CSeq: (\d*) (INVITE|OPTIONS|BYE|CANCEL|ACK|PRACK|UPDATE|REFER|SUBSCRIBE|NOTIFY|INFO|REGISTER)')
+ua_re = re.compile(r'User-Agent: (.*)')
+supported_re = re.compile(r'Supported: (.*)')
+allow_re = re.compile(r'Allow: (.*)')
+maxf_re = re.compile(r'Max-Forwards: (\d*)')
+contact_re = re.compile(r'Contact:(.*)<sip:(.*)@(.*):(.*)>')
+
+#body
+c_re = re.compile(r'c=IN IP4 (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})')
+m_re = re.compile(r'm=(\S.*) (\d{1,5}) RTP/AVP (\d.*)')
+
+#END > regex declaration block
+
 class message:
     '''Questa classe definisce l'oggetto messaggio'''
 
@@ -14,34 +38,24 @@ class message:
 
             for line in headers_list:
                 #Parsing for From:
-                From_re = re.compile(r'From: (.*) <sip:(.*)@(.*)>(.*)')
                 FROM = From_re.match(line)
                 #Parsing for To:
-                To_re = re.compile(r'To:(.*)<sip:(.*)@(.*)>(.*)')
                 TO = To_re.match(line)
                 #Parsing for Call-ID:
-                callId_re = re.compile(r'Call-ID: (.*)@(.*)')
                 CALLID = callId_re.match(line)
                 #Parsing for Via:
-                via_re = re.compile(r'Via: SIP/2.0/(TCP|UDP|TLS) (.*):(.*);branch=(.*)')
                 VIA = via_re.match(line)
                 #Parsing for CSeq:
-                cseq_re = re.compile(r'CSeq: (\d*) (INVITE|OPTIONS|BYE|CANCEL|ACK|PRACK|UPDATE|REFER|SUBSCRIBE|NOTIFY|INFO|REGISTER)')
                 CSEQ = cseq_re.match(line)
                 #Parsing for User-Agent
-                ua_re = re.compile(r'User-Agent: (.*)')
                 UA = ua_re.match(line)
                 #Parsing for Supported
-                supported_re = re.compile(r'Supported: (.*)')
                 SUPPORTED = supported_re.match(line)
                 #Parsing for Allowed
-                allow_re = re.compile(r'Allow: (.*)')
                 ALLOW = allow_re.match(line)
                 #Parsing for Max-Forwards
-                maxf_re = re.compile(r'Max-Forwards: (\d*)')
                 MAXF = maxf_re.match(line)
                 #Parsing for Contact 
-                contact_re = re.compile(r'Contact:(.*)<sip:(.*)@(.*):(.*)>')
                 CONTACT = contact_re.match(line)
 
                 if FROM:
@@ -89,7 +103,6 @@ class message:
                 Date: Thu, 20 Jan 2022 16:43:16 GMT
                 Min-SE:  1800
                 Timestamp: 1642696996
-                Contact: <sip:1234324@1.1.1.1:5060>
                 Expires: 180
                 Allow-Events: telephone-event
                 P-Asserted-Identity: "name" <sip:123456@1.1.1.1>
@@ -112,13 +125,11 @@ class message:
 
             for line in body_list:
                 #Parsing for connection attribute:
-                c_re = re.compile(r'c=IN IP4 (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})')
                 C = c_re.search(line)
                 #Parsing for a= attribute:
                 a_re = re.compile(r'a=.*')
                 A = a_re.search(line)
                 #Parsing for media attribute:
-                m_re = re.compile(r'm=(\S.*) (\d{1,5}) RTP/AVP (\d.*)')
                 M = m_re.search(line)                
                 if C:
                     self.c = {'text': C.group(0),
@@ -136,8 +147,7 @@ class message:
         
         def __init__(self, message):
             self.text = message
-            requri_re = re.compile(r'(INVITE|OPTIONS|BYE|CANCEL|ACK|PRACK|UPDATE|REFER|SUBSCRIBE|NOTIFY|INFO|REGISTER) sip:(.*)@(.*):(\d+) SIP\/2\.0')
-            resuri_re = re.compile(r'SIP/2.0 (\d{3}) (.*)')
+
             REQURI = requri_re.search(message)
             RESURI = resuri_re.search(message)
             if REQURI:
