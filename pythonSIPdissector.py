@@ -37,6 +37,9 @@ class message:
                 #Parsing for Allowed
                 allow_re = re.compile(r'Allow: (.*)')
                 ALLOW = allow_re.match(line)
+                #Parsing for Max-Forwards
+                maxf_re = re.compile(r'Max-Forwards: (\d*)')
+                MAXF = maxf_re.match(line)
 
                 if FROM:
                     self.From = {'text': FROM.group(0),
@@ -66,12 +69,14 @@ class message:
                 elif ALLOW:
                     self.allow = {'text': ALLOW.group(0),
                                   'list': ALLOW.group(1).split(', ')}
+                elif MAXF:
+                    self.allow = {'text': MAXF.group(0),
+                                  'list': int(MAXF.group(1))}                
                 else:
                     not_supported.append(line)
                 ''' HEADERS RIMANENTI
                 Date: Thu, 20 Jan 2022 16:43:16 GMT
                 Min-SE:  1800
-                Allow: INVITE, OPTIONS, BYE, CANCEL, ACK, PRACK, UPDATE, REFER, SUBSCRIBE, NOTIFY, INFO, REGISTER
                 Timestamp: 1642696996
                 Contact: <sip:1234324@1.1.1.1:5060>
                 Expires: 180
