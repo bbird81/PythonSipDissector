@@ -40,17 +40,22 @@ class message:
                 #Parsing for Max-Forwards
                 maxf_re = re.compile(r'Max-Forwards: (\d*)')
                 MAXF = maxf_re.match(line)
+                #Parsing for Contact 
+                contact_re = re.compile(r'Contact:(.*)<sip:(.*)@(.*):(.*)>')
+                CONTACT = contact_re.match(line)
 
                 if FROM:
                     self.From = {'text': FROM.group(0),
                                  'label': FROM.group(1).strip(),
                                  'user': FROM.group(2),
-                                 'realm': FROM.group(3)}
+                                 'realm': FROM.group(3),
+                                 'aor': "SIP:"+FROM.group(2)+"@"+FROM.group(3)}
                 elif TO:
                     self.to = {'text': TO.group(0),
                                'label': TO.group(1),
                                'user': TO.group(2),
-                               'realm': TO.group(3)}
+                               'realm': TO.group(3),
+                               'aor': "SIP:"+FROM.group(2)+"@"+FROM.group(3)}
                 elif CALLID:
                     self.callId = {'text': CALLID.group(0),
                                    'uuid': CALLID.group(1),
@@ -70,8 +75,14 @@ class message:
                     self.allow = {'text': ALLOW.group(0),
                                   'list': ALLOW.group(1).split(', ')}
                 elif MAXF:
-                    self.allow = {'text': MAXF.group(0),
-                                  'list': int(MAXF.group(1))}                
+                    self.max_forward = {'text': MAXF.group(0),
+                                  'list': int(MAXF.group(1))}
+                elif CONTACT:
+                    self.contact = {'text': CONTACT.group(0),
+                                    'label': CONTACT.group(1).strip(),
+                                    'number': CONTACT.group(2),
+                                    'address': CONTACT.group(3),
+                                    'port': CONTACT.group(4)}     
                 else:
                     not_supported.append(line)
                 ''' HEADERS RIMANENTI
