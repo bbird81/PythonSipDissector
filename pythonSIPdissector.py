@@ -69,7 +69,7 @@ class message:
                                'label': TO.group(1),
                                'user': TO.group(2),
                                'realm': TO.group(3),
-                               'aor': "SIP:"+FROM.group(2)+"@"+FROM.group(3)}
+                               'aor': "SIP:"+TO.group(2)+"@"+TO.group(3)}
                 elif CALLID:
                     self.callId = {'text': CALLID.group(0),
                                    'uuid': CALLID.group(1),
