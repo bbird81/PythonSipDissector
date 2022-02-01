@@ -17,6 +17,7 @@ supported_re = re.compile(r'Supported: (.*)')
 allow_re = re.compile(r'Allow: (.*)')
 maxf_re = re.compile(r'Max-Forwards: (\d*)')
 contact_re = re.compile(r'Contact:(.*)<sip:(.*)@(.*):(.*)>')
+contentl_re = re.compile(r'Content-Length: (\d*)')
 
 #body
 c_re = re.compile(r'c=IN IP4 (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})')
@@ -57,6 +58,8 @@ class message:
                 MAXF = maxf_re.match(line)
                 #Parsing for Contact 
                 CONTACT = contact_re.match(line)
+                #Parsing for Content-Lenght
+                CONTENTL = contentl_re.match(line)
 
                 if FROM:
                     self.From = {'text': FROM.group(0),
@@ -97,6 +100,9 @@ class message:
                                     'number': CONTACT.group(2),
                                     'address': CONTACT.group(3),
                                     'port': CONTACT.group(4)}     
+                elif CONTENTL:
+                    self.content_lenght = {'text': CONTENTL.group(0),
+                                           'value': CONTENTL.group(1)}
                 else:
                     not_supported.append(line)
                 ''' HEADERS RIMANENTI
@@ -110,7 +116,6 @@ class message:
                 Session-Expires:  3600
                 Content-Type: application/sdp
                 Content-Disposition: session;handling=required
-                Content-Length: 307
                 '''
 
     class Body:
